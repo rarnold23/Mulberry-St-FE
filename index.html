@@ -8,6 +8,46 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bastardo Grotesk Font -->
+    <style>
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Thin.ttf') format('truetype');
+            font-weight: 100;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Semibold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Black.ttf') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+        }
+    </style>
 </head>
 <body>
     <div class="music-player">
@@ -16,89 +56,21 @@
         
         <!-- Main Illustration -->
         <div class="main-illustration">
-            <!-- Combined Component -->
-            <div class="combined-component">
-                <!-- Woman Illustration -->
-                <div class="woman-illo">
-                    <div class="green-ring"></div>
-                    <div class="tan-ring-inside"></div>
-                    <div class="woman"></div>
-                </div>
-                
-                <!-- Typography Elements -->
-                <div class="type-elements">
-                    <!-- MULBERRY STREET Complete SVG -->
-                    <div class="mulberry-street-complete">
-                        <div class="ms-extruded">
-                            <img src="assets/MS Extruded.svg" alt="MS Extruded">
-                        </div>
-                        <div class="ms-white">
-                            <img src="assets/MS White.svg" alt="MS White">
-                        </div>
-                        <div class="ms-stroke">
-                            <img src="assets/MS Stroke.svg" alt="MS Stroke">
-                        </div>
-                        <div class="ms-red">
-                            <img src="assets/MS Red.svg" alt="MS Red">
-                        </div>
-                    </div>
-                    
-                    <!-- RADIO Complete SVG -->
-                    <div class="radio-complete">
-                        <div class="radio-vector">
-                            <img src="http://localhost:3845/assets/dc5e5a10f37127fc5eadc6ee1500d1abbe8c5b5e.svg" alt="Radio Vector">
-                        </div>
-                        <div class="radio-white">
-                            <img src="assets/Radio White.svg" alt="Radio White">
-                        </div>
-                        <div class="radio-stroke">
-                            <img src="assets/Radio Stroke.svg" alt="Radio Stroke">
-                        </div>
-                        <div class="radio-red">
-                            <img src="assets/Radio Red.svg" alt="Radio Red">
-                        </div>
-                    </div>
-                    
-                    <div class="diamond-left">
-                        <img src="assets/Diamond-Left.svg">
-                    </div>
-                    <div class="diamond-right">
-                        <img src="assets/Diamond-Right.svg">
-                    </div>
-                </div>
-                
-                <!-- Banner -->
-                <div class="banner">
-                    <div class="banner-layer-2"></div>
-                    <div class="banner-layer-1"></div>
-                    <div class="banner-text-white-bg">
-                        <img src="assets/Text-White BG.svg">
-                    </div>
-                    <div class="banner-text-green">
-                        <img src="assets/Text-Green.svg">
-                    </div>
-                </div>
-            </div>
+            <img src="assets/Illustration.png" alt="Main Illustration" class="illustration-image">
         </div>
         
         <!-- Controls -->
         <div class="controls">
             <button class="control-btn previous-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M10 12L6 8L10 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <img src="http://localhost:3845/assets/15a14a27ef2a3177aee68bd25818d76a32bac853.svg" alt="Previous" style="width: 16px; height: 16px;">
             </button>
             
             <button class="control-btn play-btn">
-                <svg width="24" height="30" viewBox="0 0 24 30" fill="none">
-                    <path d="M8 5L19 15L8 25V5Z" fill="white"/>
-                </svg>
+                <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
             </button>
             
             <button class="control-btn next-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 4L10 8L6 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <img src="http://localhost:3845/assets/a0e6fe994a8198a9b5fd1a4608b4d07dd9e9f799.svg" alt="Next" style="width: 16px; height: 16px;">
             </button>
             
             <div class="timeline">
@@ -120,9 +92,7 @@
             </div>
             
             <button class="control-btn list-btn">
-                <svg width="24" height="20" viewBox="0 0 24 20" fill="none">
-                    <path d="M3 3H21M3 10H21M3 17H21" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+                <img src="http://localhost:3845/assets/60d328f5be0e992eb83d7ada771f324512a9bb0c.svg" alt="List" style="width: 24px; height: 20px;">
             </button>
         </div>
     </div>

@@ -1,0 +1,30 @@
+{
+  "songs": [
+    {
+      "id": 1,
+      "artist": "Bad Bunny",
+      "title": "BAILE INoLVIDABLE",
+      "time": "6:50 PM",
+      "date": "7/3/2025",
+      "filePath": "music/Baile Inolvidable- Bad Bunny.m4a"
+    },
+    {
+      "id": 2,
+      "artist": "Clipse",
+      "title": "Chains & Whips",
+      "time": "2:23 PM",
+      "date": "7/21/2025",
+      "filePath": "music/Chains Whips- Clipse Kendrick Lamar Pusha T Malice.m4a"
+    },
+    {
+      "id": 3,
+      "artist": "Dean Martin",
+      "title": "Volare",
+      "time": "11:52 AM",
+      "date": "7/4/2025",
+      "filePath": "music/Volare nel Blu Di Pinto Di Blu- Dean Martin.m4a"
+    }
+  ],
+  "lastUpdated": "2025-01-27T10:30:00Z",
+  "totalSongs": 3
+} 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song List - Mulberry Street Radio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="song-list.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bastardo Grotesk Font -->
+    <style>
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Thin.ttf') format('truetype');
+            font-weight: 100;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Semibold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Black.ttf') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="song-list-container">
+        <!-- Green Background -->
+        <div class="green-background"></div>
+        
+        <!-- Content Container -->
+        <div class="content-container">
+            <!-- Header Image -->
+            <div class="header-image">
+                <img src="http://localhost:3845/assets/c4b1d0c9a634dac341423b8c1045d1480c66c2e3.png" alt="Header Image">
+            </div>
+            
+            <!-- Description Text -->
+            <div class="description-text">
+                <p>Mulberry Street Radio is the sounds of Little Italy. Songs are picked up from the livestream and catalogued here, whether it's coming from a car, a storefront, or some dickhead with a bluetooth speaker.</p>
+                <p>&nbsp;</p>
+                <p>A dumb idea from Rich Arnold.</p>
+            </div>
+            
+            <!-- Song List -->
+            <div class="song-list" id="songList">
+                <!-- Songs will be populated dynamically -->
+            </div>
+            
+            <!-- Back Button -->
+            <button class="back-btn">
+                <img src="http://localhost:3845/assets/c41e93d2ce7848db686d2bdf0cd5a8b923302220.svg" alt="Back">
+            </button>
+        </div>
+    </div>
+    
+    <script src="song-list.js"></script>
+</body>
+</html> 
