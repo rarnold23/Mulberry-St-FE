@@ -228,6 +228,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalMinutes = Math.floor(audio.duration / 60);
         const totalSeconds = Math.floor(audio.duration % 60);
         totalTimeEl.textContent = `${totalMinutes}:${totalSeconds.toString().padStart(2, '0')}`;
+        
+        // Debug audio file properties
+        console.log('Audio loaded - File:', audio.src);
+        console.log('Duration:', audio.duration);
+        console.log('Seekable ranges:', audio.seekable.length);
+        if (audio.seekable.length > 0) {
+            console.log('Seekable start:', audio.seekable.start(0));
+            console.log('Seekable end:', audio.seekable.end(0));
+        }
+        console.log('Buffered ranges:', audio.buffered.length);
+        if (audio.buffered.length > 0) {
+            console.log('Buffered start:', audio.buffered.start(0));
+            console.log('Buffered end:', audio.buffered.end(0));
+        }
     }
     
     function onTimeUpdate() {
@@ -339,12 +353,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Click on progress bar to seek
     function seekToPosition(e) {
-        if (!audio) return;
+        console.log('Progress bar clicked!');
+        if (!audio) {
+            console.log('No audio element');
+            return;
+        }
         
         const rect = progressBar.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const percentage = clickX / rect.width;
-        audio.currentTime = percentage * audio.duration;
+        const newTime = percentage * audio.duration;
+        
+        console.log('Click at:', clickX, 'Bar width:', rect.width, 'Percentage:', percentage, 'New time:', newTime);
+        console.log('Audio src before seek:', audio.src);
+        
+        audio.currentTime = newTime;
+        console.log('Audio time set to:', audio.currentTime);
+        
+        // Check if audio element is still the same after a brief delay
+        setTimeout(() => {
+            console.log('Audio src after seek:', audio ? audio.src : 'no audio');
+            console.log('Audio time after delay:', audio ? audio.currentTime : 'no audio');
+        }, 100);
     }
     
     // Event listeners
@@ -390,7 +420,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the player
     restoreMusicState();
-    loadSongs();
+    
+    // Only load songs if we don't already have them from restoreMusicState
+    if (songs.length === 0) {
+        loadSongs();
+    }
     
     // Function to check for song selection from localStorage
     function checkForSongSelection() {

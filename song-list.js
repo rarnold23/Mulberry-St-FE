@@ -277,6 +277,7 @@ function addSongItemListeners() {
             // Add pause functionality
             songNumber.addEventListener('click', function(e) {
                 e.stopPropagation();
+                e.preventDefault();
                 pauseCurrentSong(index);
             });
         } else {
@@ -297,19 +298,18 @@ function addSongItemListeners() {
             if (playButton) {
                 playButton.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    e.preventDefault();
                     playSelectedSong(index);
                 });
             }
         }
         
-        // Add click functionality for navigation
-        item.addEventListener('click', function() {
-            const songId = this.getAttribute('data-song-id');
-            console.log(`Song ${index + 1} (ID: ${songId}) clicked`);
-            
-            // Store selected song index in localStorage and navigate back
-            localStorage.setItem('selectedSongIndex', index.toString());
-            goBack();
+        // Explicitly prevent any clicks on the song item itself
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Song item clicked - preventing default behavior');
+            return false;
         });
     });
 }
@@ -427,7 +427,7 @@ function playSelectedSong(index) {
     localStorage.setItem('selectedSongIndex', index.toString());
     
     // Update the UI to reflect the currently playing song
-    populateSongList(window.currentSongs);
+    // populateSongList(window.currentSongs); // Removed to prevent duplicate event listeners
 }
 
 // Fallback function to load local data if Google Sheets fails
