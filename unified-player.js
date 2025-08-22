@@ -148,36 +148,21 @@ function showSongList() {
     console.log('  - SVG background bottom after reset:', svgBackground.style.bottom);
     console.log('  - SVG background classes after reset:', svgBackground.className);
     
-    // 2. Hide player view
-    console.log('🔧 Step 2: Hiding player view');
-    playerView.style.display = 'none';
-    console.log('  - Player view hidden');
-    console.log('  - Player view display after hide:', playerView.style.display);
-    
-    // 3. Show song list view
-    console.log('🔧 Step 3: Showing song list view');
+    // 2. Show song list view first (but keep it transparent)
+    console.log('🔧 Step 2: Showing song list view (transparent)');
     songListView.style.display = 'block';
-    console.log('  - Song list view shown');
+    songListView.style.backgroundColor = '#00724d'; // Temporary green background
+    console.log('  - Song list view shown with green background');
     console.log('  - Song list view display after show:', songListView.style.display);
     
-    // Check if white flash might be coming from song list container
-    console.log('🔍 Checking potential white background sources:');
-    console.log('  - Song list container background:', window.getComputedStyle(songListView).backgroundColor);
-    console.log('  - Content container background:', window.getComputedStyle(contentContainer).backgroundColor);
-    console.log('  - Body background:', window.getComputedStyle(document.body).backgroundColor);
-    console.log('  - HTML background:', window.getComputedStyle(document.documentElement).backgroundColor);
-    console.log('  - SVG background computed opacity:', window.getComputedStyle(svgBackground).opacity);
-    console.log('  - SVG background computed visibility:', window.getComputedStyle(svgBackground).visibility);
-    console.log('  - SVG background computed display:', window.getComputedStyle(svgBackground).display);
-    
-    // 4. Force a reflow to ensure initial state is applied
-    console.log('🔧 Step 4: Forcing reflow');
+    // 3. Force a reflow to ensure initial state is applied
+    console.log('🔧 Step 3: Forcing reflow');
     svgBackground.offsetHeight;
     console.log('  - Reflow completed');
     
-    // 5. Now trigger the animation
+    // 4. Start the SVG background animation
     setTimeout(() => {
-        console.log('🔧 Step 5: Adding slide-up class to SVG background');
+        console.log('🔧 Step 4: Adding slide-up class to SVG background');
         console.log('  - SVG background classes before slide-up:', svgBackground.className);
         svgBackground.classList.add('slide-up');
         console.log('  - SVG background classes after slide-up:', svgBackground.className);
@@ -189,6 +174,15 @@ function showSongList() {
         }, 10);
     }, 50);
     
+    // 5. Hide player view after SVG background is visible
+    setTimeout(() => {
+        console.log('🔧 Step 5: Hiding player view (after SVG is visible)');
+        playerView.style.display = 'none';
+        console.log('  - Player view hidden');
+        console.log('  - Player view display after hide:', playerView.style.display);
+    }, 300); // Wait for SVG to be visible
+    
+    // 6. Add fade-in class to content container
     setTimeout(() => {
         console.log('🔧 Step 6: Adding fade-in class to content container');
         console.log('  - Content container classes before fade-in:', contentContainer.className);
@@ -199,7 +193,13 @@ function showSongList() {
         setTimeout(() => {
             console.log('  - Content container computed opacity after fade-in:', window.getComputedStyle(contentContainer).opacity);
         }, 10);
-    }, 300);
+    }, 350);
+    
+    // 7. Remove temporary background after animation completes
+    setTimeout(() => {
+        songListView.style.backgroundColor = 'transparent';
+        console.log('  - Removed temporary green background');
+    }, 600);
     
     setTimeout(() => {
         currentView = 'song-list';
@@ -221,27 +221,34 @@ function showPlayer() {
     
     isTransitioning = true;
     
-    // Trigger exit animation
-    console.log('  - Removing fade-in and adding fade-out to content container');
+    // 1. Trigger exit animation for content
+    console.log('🔧 Step 1: Triggering content fade-out');
     contentContainer.classList.remove('fade-in');
     contentContainer.classList.add('fade-out');
     
+    // 2. Start SVG background slide-down animation
     setTimeout(() => {
-        console.log('  - Removing slide-up and adding slide-down to SVG background');
+        console.log('🔧 Step 2: Starting SVG background slide-down');
         svgBackground.classList.remove('slide-up');
         svgBackground.classList.add('slide-down');
     }, 100);
     
+    // 3. Show player view before hiding song list (to prevent white flash)
     setTimeout(() => {
-        console.log('  - Hiding song list view and showing player view');
-        // Hide song list view
-        songListView.style.display = 'none';
-        
-        // Show player view
+        console.log('🔧 Step 3: Showing player view (before hiding song list)');
         playerView.style.display = 'block';
+        console.log('  - Player view shown');
+    }, 200);
+    
+    // 4. Hide song list view after player is visible
+    setTimeout(() => {
+        console.log('🔧 Step 4: Hiding song list view (after player is visible)');
+        songListView.style.display = 'none';
+        songListView.style.backgroundColor = 'transparent'; // Reset temporary background
+        console.log('  - Song list view hidden');
         
         // Reset classes and ensure proper state
-        console.log('  - Resetting animation classes');
+        console.log('🔧 Step 5: Resetting animation classes');
         contentContainer.classList.remove('fade-out');
         svgBackground.classList.remove('slide-down');
         
