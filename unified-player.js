@@ -148,20 +148,14 @@ function showSongList() {
     console.log('  - SVG background bottom after reset:', svgBackground.style.bottom);
     console.log('  - SVG background classes after reset:', svgBackground.className);
     
-    // 2. Hide player view
-    console.log('🔧 Step 2: Hiding player view');
-    playerView.style.display = 'none';
-    console.log('  - Player view hidden');
-    console.log('  - Player view display after hide:', playerView.style.display);
-    
-    // 3. Show song list view
-    console.log('🔧 Step 3: Showing song list view');
+    // 2. Show song list view (keep player view visible until animation covers it)
+    console.log('🔧 Step 2: Showing song list view');
     songListView.style.display = 'block';
     console.log('  - Song list view shown');
     console.log('  - Song list view display after show:', songListView.style.display);
-    
-    // Check if white flash might be coming from song list container
-    console.log('🔍 Checking potential white background sources:');
+
+    // 3. Check if white flash might be coming from song list container
+    console.log('🔍 Step 3: Checking potential white background sources');
     console.log('  - Song list container background:', window.getComputedStyle(songListView).backgroundColor);
     console.log('  - Content container background:', window.getComputedStyle(contentContainer).backgroundColor);
     console.log('  - Body background:', window.getComputedStyle(document.body).backgroundColor);
@@ -202,6 +196,9 @@ function showSongList() {
     }, 300);
     
     setTimeout(() => {
+        console.log('🔧 Step 7: Finalizing transition');
+        console.log('  - Hiding player view');
+        playerView.style.display = 'none';
         currentView = 'song-list';
         isTransitioning = false;
         console.log('✅ Song list view active');
