@@ -1,5 +1,42 @@
 // Music Player JavaScript
+
+// FLIP transition system for smooth page transitions
+let isTransitioning = false;
+let transitionOverlay = null;
+
+// Create persistent overlay for FLIP transitions
+function createTransitionOverlay() {
+    if (transitionOverlay) return transitionOverlay;
+    
+    transitionOverlay = document.createElement('div');
+    transitionOverlay.id = 'transition-overlay';
+    transitionOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #00724D;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.1) translateY(100vh);
+        transition: none;
+        will-change: transform, opacity;
+    `;
+    
+    // Add noise pattern using CSS filter
+    transitionOverlay.style.filter = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\' x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\' filterUnits=\'userSpaceOnUse\' color-interpolation-filters=\'sRGB\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'1.25 1.25\' stitchTiles=\'stitch\' numOctaves=\'3\' result=\'noise\' seed=\'4413\'/%3E%3CfeColorMatrix in=\'noise\' type=\'luminanceToAlpha\' result=\'alphaNoise\'/%3E%3CfeComponentTransfer in=\'alphaNoise\' result=\'coloredNoise1\'%3E%3CfeFuncA type=\'discrete\' tableValues=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \'/%3E%3C/feComponentTransfer%3E%3CfeComponentTransfer in=\'alphaNoise\' result=\'coloredNoise2\'%3E%3CfeFuncA type=\'discrete\' tableValues=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color=\'%23004C33\' result=\'color1Flood\'/%3E%3CfeComposite operator=\'in\' in2=\'coloredNoise1\' in=\'color1Flood\' result=\'color1\'/%3E%3CfeFlood flood-color=\'%23519912\' result=\'color2Flood\'/%3E%3CfeComposite operator=\'in\' in2=\'coloredNoise2\' in=\'color2Flood\' result=\'color2\'/%3E%3CfeMerge result=\'effect1_noise_577_3813\'%3E%3CfeMergeNode in=\'SourceGraphic\'/%3E%3CfeMergeNode in=\'color1\'/%3E%3CfeMergeNode in=\'color2\'/%3E%3C/feMerge%3E%3C/filter%3E%3C/svg%3E#noise")';
+    
+    document.body.appendChild(transitionOverlay);
+    return transitionOverlay;
+}
+
+// Cache the page on load
 document.addEventListener('DOMContentLoaded', function() {
+    // Create overlay immediately
+    createTransitionOverlay();
+    
     // Get DOM elements
     const playBtn = document.querySelector('.play-btn');
     const previousBtn = document.querySelector('.previous-btn');
@@ -19,6 +56,48 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPlaying = false;
     let currentSongIndex = 0;
     let songs = [];
+    
+    // FLIP transition to song list page
+    function flipToSongList() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        
+        const overlay = createTransitionOverlay();
+        
+        // Store current music state
+        const musicState = {
+            currentSongIndex: currentSongIndex,
+            isPlaying: isPlaying,
+            currentTime: audio ? audio.currentTime : 0,
+            songs: songs
+        };
+        localStorage.setItem('musicState', JSON.stringify(musicState));
+        
+        // Start from bottom of screen (full width, off-screen)
+        overlay.style.transform = 'translateY(100vh)';
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.transition = 'none';
+        
+        // Force reflow
+        overlay.offsetHeight;
+        
+        // Slide up to fullscreen
+        requestAnimationFrame(() => {
+            overlay.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            overlay.style.transform = 'translateY(0)';
+            
+            // Navigate after animation completes
+            setTimeout(() => {
+                window.location.href = 'song-list.html';
+            }, 450);
+        });
+    }
+    
+    // List button click handler
+    listBtn.addEventListener('click', function() {
+        flipToSongList();
+    });
     
     // Google Sheets configuration
     const GOOGLE_SHEET_ID = '1w_Yrcv_VH8rALORHWaUZ6PAYns7WQY3-hPsAjwJmEEI';
@@ -382,41 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
     previousBtn.addEventListener('click', skipPrevious);
     nextBtn.addEventListener('click', skipNext);
     progressBar.addEventListener('click', seekToPosition);
-    
-    // List button functionality with transition
-    listBtn.addEventListener('click', function() {
-        // Store current music state for continuous playback
-        const musicState = {
-            currentSongIndex: currentSongIndex,
-            isPlaying: isPlaying,
-            currentTime: audio ? audio.currentTime : 0,
-            songs: songs
-        };
-        localStorage.setItem('musicState', JSON.stringify(musicState));
-        
-        // Create overlay for smooth transition
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100vw';
-        overlay.style.height = '100vh';
-        overlay.style.backgroundColor = '#00724d';
-        overlay.style.zIndex = '9999';
-        overlay.style.transform = 'translateY(100vh)';
-        overlay.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        document.body.appendChild(overlay);
-        
-        // Trigger slide-up animation
-        setTimeout(() => {
-            overlay.style.transform = 'translateY(0)';
-        }, 100);
-        
-        // Navigate to song list page after animation
-        setTimeout(() => {
-            window.location.href = 'song-list.html';
-        }, 800);
-    });
     
     // Initialize the player
     restoreMusicState();

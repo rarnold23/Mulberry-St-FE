@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveStreamCrop Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Bastardo Grotesk', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #00724d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .test-section p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .livestream-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .controls button {
+            background: #00724d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .controls button:hover {
+            background: #005a3d;
+        }
+        
+        .status {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>LiveStreamCrop Component Test</h1>
+        
+        <div class="test-section">
+            <h3>Basic Test (Replaces EarthCam)</h3>
+            <p>This test replaces the EarthCam video with a YouTube livestream using the same dimensions as the original header image.</p>
+            
+            <div class="livestream-wrapper">
+                <div id="test-livestream"></div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="testCrop()">Test Crop Settings</button>
+                <button onclick="testReset()">Reset</button>
+                <button onclick="testResponsive()">Toggle Responsive</button>
+            </div>
+            
+            <div class="status" id="status">
+                Status: Component initialized
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Responsive Test</h3>
+            <p>This test shows the responsive version that maintains 16:9 aspect ratio.</p>
+            
+            <div class="livestream-wrapper">
+                <div id="test-responsive"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Data Attributes Test</h3>
+            <p>This test uses data attributes for auto-initialization.</p>
+            
+            <div class="livestream-wrapper">
+                <div 
+                    data-livestream-crop
+                    data-video-id="GJFHpFppy2k"
+                    data-width="400"
+                    data-height="225"
+                    data-offset-x="-20"
+                    data-offset-y="-10"
+                    data-scale="1.3"
+                ></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="live-stream-crop.js"></script>
+    <script>
+        let livestreamInstance;
+        let responsiveInstance;
+        let currentCropIndex = 0;
+        
+        const cropPresets = [
+            { name: 'Default', offsetX: 0, offsetY: 0, scale: 1 },
+            { name: 'Hide Black Bars', offsetX: 0, offsetY: -12.5, scale: 1.25 },
+            { name: 'Center Region', offsetX: -25, offsetY: -25, scale: 1.5 },
+            { name: 'Zoom Center', offsetX: -12.5, offsetY: -12.5, scale: 1.25 },
+            { name: 'Remove UI', offsetX: 0, offsetY: -10, scale: 1.2 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing LiveStreamCrop tests...');
+            
+            // Initialize basic test
+            livestreamInstance = new LiveStreamCrop('test-livestream', {
+                videoId: 'GJFHpFppy2k',
+                width: 425,
+                height: 239,
+                offsetX: -10,
+                offsetY: -15,
+                scale: 1.2,
+                responsive: false
+            });
+            
+            // Initialize responsive test
+            responsiveInstance = new LiveStreamCrop('test-responsive', {
+                videoId: 'GJFHpFppy2k',
+                responsive: true,
+                offsetX: -10,
+                offsetY: -15,
+                scale: 1.2
+            });
+            
+            updateStatus('Components initialized successfully');
+        });
+
+        function testCrop() {
+            if (!livestreamInstance) return;
+            
+            const preset = cropPresets[currentCropIndex];
+            livestreamInstance.updateCrop(preset.offsetX, preset.offsetY, preset.scale);
+            
+            updateStatus(`Applied crop preset: ${preset.name} (offsetX: ${preset.offsetX}, offsetY: ${preset.offsetY}, scale: ${preset.scale})`);
+            
+            currentCropIndex = (currentCropIndex + 1) % cropPresets.length;
+        }
+
+        function testReset() {
+            if (!livestreamInstance) return;
+            
+            livestreamInstance.reset();
+            currentCropIndex = 0;
+            updateStatus('Component reset to initial state');
+        }
+
+        function testResponsive() {
+            if (!livestreamInstance) return;
+            
+            const isResponsive = livestreamInstance.options.responsive;
+            livestreamInstance.destroy();
+            
+            livestreamInstance = new LiveStreamCrop('test-livestream', {
+                videoId: 'GJFHpFppy2k',
+                width: 425,
+                height: 239,
+                offsetX: -10,
+                offsetY: -15,
+                scale: 1.2,
+                responsive: !isResponsive
+            });
+            
+            updateStatus(`Toggled responsive mode: ${!isResponsive}`);
+        }
+
+        function updateStatus(message) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = `Status: ${message}`;
+            console.log(`📊 ${message}`);
+        }
+
+        // Log component events
+        window.addEventListener('load', function() {
+            console.log('✅ LiveStreamCrop test page loaded');
+            console.log('🎥 Test video ID: GJFHpFppy2k');
+            console.log('📐 Test dimensions: 425x239 (matches header image)');
+            console.log('🎯 Test crop: offsetX: -10, offsetY: -15, scale: 1.2');
+        });
+    </script>
+</body>
+</html>

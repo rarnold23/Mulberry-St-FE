@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Music Player - Bad Bunny</title>
-    <link rel="stylesheet" href="styles.css?v=1.1">
+    <link rel="stylesheet" href="styles.css?v=1.2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -62,15 +62,16 @@
         
         <!-- Controls -->
         <div class="controls">
-            <button class="control-btn previous-btn">
+            <!-- Desktop buttons (hidden on mobile) -->
+            <button class="control-btn previous-btn desktop-btn">
                 <img src="http://localhost:3845/assets/15a14a27ef2a3177aee68bd25818d76a32bac853.svg" alt="Previous" style="width: 16px; height: 16px;">
             </button>
             
-            <button class="control-btn play-btn">
+            <button class="control-btn play-btn desktop-btn">
                 <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
             </button>
             
-            <button class="control-btn next-btn">
+            <button class="control-btn next-btn desktop-btn">
                 <img src="http://localhost:3845/assets/a0e6fe994a8198a9b5fd1a4608b4d07dd9e9f799.svg" alt="Next" style="width: 16px; height: 16px;">
             </button>
             
@@ -92,9 +93,28 @@
                 </div>
             </div>
             
-            <button class="control-btn list-btn" id="show-song-list">
+            <button class="control-btn list-btn desktop-btn" id="show-song-list">
                 <img src="http://localhost:3845/assets/60d328f5be0e992eb83d7ada771f324512a9bb0c.svg" alt="List" style="width: 24px; height: 20px;">
             </button>
+            
+            <!-- Mobile buttons (hidden on desktop) -->
+            <div class="buttons-row mobile-buttons">
+                <button class="control-btn previous-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/15a14a27ef2a3177aee68bd25818d76a32bac853.svg" alt="Previous" style="width: 16px; height: 16px;">
+                </button>
+                
+                <button class="control-btn play-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
+                </button>
+                
+                <button class="control-btn next-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/a0e6fe994a8198a9b5fd1a4608b4d07dd9e9f799.svg" alt="Next" style="width: 16px; height: 16px;">
+                </button>
+                
+                <button class="control-btn list-btn mobile-btn" id="show-song-list-mobile">
+                    <img src="http://localhost:3845/assets/60d328f5be0e992eb83d7ada771f324512a9bb0c.svg" alt="List" style="width: 24px; height: 20px;">
+                </button>
+            </div>
         </div>
     </div>
 
@@ -161,7 +181,6 @@
     </div>
     
     <script src="unified-player.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="earthcam-stream.js"></script>
+    <script src="live-stream-crop.js"></script>
 </body>
 </html>

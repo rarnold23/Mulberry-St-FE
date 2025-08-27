@@ -7,6 +7,7 @@ let audio = null;
 let isPlaying = false;
 let currentSongIndex = 0;
 let songs = [];
+let isMobile = false;
 
 // DOM elements
 let playerView, songListView, showSongListBtn, backToPlayerBtn;
@@ -17,6 +18,10 @@ let songListContainer, svgBackground, contentContainer;
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎵 Initializing Unified Music Player');
+    
+    // Detect mobile device
+    isMobile = window.innerWidth <= 768;
+    console.log('📱 Mobile device detected:', isMobile);
     
     // Get DOM elements
     initializeElements();
@@ -49,7 +54,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load EarthCam stream
     loadEarthCamStream();
+    
+    // Handle window resize for responsive design
+    window.addEventListener('resize', handleResize);
 });
+
+function handleResize() {
+    const wasMobile = isMobile;
+    isMobile = window.innerWidth <= 768;
+    
+    if (wasMobile !== isMobile) {
+        console.log('📱 Mobile state changed:', isMobile);
+        // Reinitialize layout if needed
+        if (currentView === 'song-list') {
+            // Force reflow for song list view
+            setTimeout(() => {
+                if (contentContainer) {
+                    contentContainer.style.display = 'none';
+                    contentContainer.offsetHeight; // Force reflow
+                    contentContainer.style.display = '';
+                }
+            }, 10);
+        }
+    }
+}
 
 function initializeElements() {
     // Views
@@ -90,6 +118,11 @@ function setupEventListeners() {
     nextBtn.addEventListener('click', skipNext);
     progressBar.addEventListener('click', seekToPosition);
     
+    // Mobile touch events
+    if (isMobile) {
+        setupMobileTouchEvents();
+    }
+    
     // Keyboard navigation
     document.addEventListener('keydown', function(e) {
         switch(e.code) {
@@ -115,6 +148,89 @@ function setupEventListeners() {
     });
     
     console.log('✅ Event listeners set up');
+}
+
+function setupMobileTouchEvents() {
+    // Add touch event listeners for mobile
+    if (progressBar) {
+        progressBar.addEventListener('touchstart', handleTouchStart);
+        progressBar.addEventListener('touchmove', handleTouchMove);
+        progressBar.addEventListener('touchend', handleTouchEnd);
+    }
+    
+    // Prevent zoom on double tap for mobile
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+}
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}
+
+function handleTouchMove(e) {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
+    
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // Prevent default if it's a horizontal swipe
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        e.preventDefault();
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // Check if touch was on progress bar
+    const rect = progressBar.getBoundingClientRect();
+    const touchX = touchEndX;
+    const touchY = touchEndY;
+    
+    if (touchX >= rect.left && touchX <= rect.right && 
+        touchY >= rect.top && touchY <= rect.bottom) {
+        // Touch was on progress bar, seek to position
+        seekToPosition(e);
+        return;
+    }
+    
+    // Handle horizontal swipe gestures (only if not on progress bar)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+            // Swipe left - next song
+            skipNext();
+        } else {
+            // Swipe right - previous song
+            skipPrevious();
+        }
+    }
+    
+    // Reset touch coordinates
+    touchStartX = 0;
+    touchStartY = 0;
 }
 
 // View Management
@@ -221,36 +337,50 @@ function showPlayer() {
     console.log('  - Current view:', currentView);
     console.log('  - Is transitioning:', isTransitioning);
     
+    // Log initial states
+    console.log('📊 Initial states:');
+    console.log('  - Player view display:', playerView.style.display);
+    console.log('  - Song list view display:', songListView.style.display);
+    console.log('  - SVG background opacity:', svgBackground.style.opacity);
+    console.log('  - SVG background bottom:', svgBackground.style.bottom);
+    console.log('  - SVG background classes:', svgBackground.className);
+    
     isTransitioning = true;
     
-    // 1. Trigger exit animation for content
-    console.log('🔧 Step 1: Triggering content fade-out');
+    // 1. Show player view first with temporary background
+    console.log('🔧 Step 1: Showing player view with temporary background');
+    playerView.style.display = 'block';
+    playerView.style.backgroundColor = '#fffdf9'; // Temporary white background
+    console.log('  - Player view shown with white background');
+    console.log('  - Player view display after show:', playerView.style.display);
+    
+    // 2. Trigger exit animation for content
+    console.log('🔧 Step 2: Triggering content fade-out');
     contentContainer.classList.remove('fade-in');
     contentContainer.classList.add('fade-out');
     
-    // 2. Start SVG background slide-down animation
+    // 3. Start SVG background slide-down animation
     setTimeout(() => {
-        console.log('🔧 Step 2: Starting SVG background slide-down');
+        console.log('🔧 Step 3: Starting SVG background slide-down');
         svgBackground.classList.remove('slide-up');
         svgBackground.classList.add('slide-down');
     }, 100);
     
-    // 3. Show player view before hiding song list (to prevent white flash)
+    // 4. Hide song list view after SVG background is hidden
     setTimeout(() => {
-        console.log('🔧 Step 3: Showing player view (before hiding song list)');
-        playerView.style.display = 'block';
-        console.log('  - Player view shown');
-    }, 200);
-    
-    // 4. Hide song list view after player is visible
-    setTimeout(() => {
-        console.log('🔧 Step 4: Hiding song list view (after player is visible)');
+        console.log('🔧 Step 4: Hiding song list view (after SVG is hidden)');
         songListView.style.display = 'none';
         songListView.style.backgroundColor = 'transparent'; // Reset temporary background
         console.log('  - Song list view hidden');
+    }, 400);
+    
+    // 5. Remove temporary background and finalize transition
+    setTimeout(() => {
+        playerView.style.backgroundColor = 'transparent';
+        console.log('  - Removed temporary white background');
+        console.log('🔧 Step 5: Finalizing transition');
         
         // Reset classes and ensure proper state
-        console.log('🔧 Step 5: Resetting animation classes');
         contentContainer.classList.remove('fade-out');
         svgBackground.classList.remove('slide-down');
         
@@ -261,7 +391,10 @@ function showPlayer() {
         currentView = 'player';
         isTransitioning = false;
         console.log('✅ Player view active');
-    }, 550);
+        console.log('📊 Final states:');
+        console.log('  - SVG background computed opacity:', window.getComputedStyle(svgBackground).opacity);
+        console.log('  - SVG background computed bottom:', window.getComputedStyle(svgBackground).bottom);
+    }, 600);
 }
 
 // Song Management
@@ -388,6 +521,7 @@ function populateSongList() {
         songItem.className = 'song-item';
         songItem.setAttribute('data-song-id', song.id);
         
+        // All songs use simplified 3-column layout on mobile
         songItem.innerHTML = `
             <div class="song-divider"></div>
             <div class="song-content">
@@ -414,41 +548,78 @@ function addSongItemListeners() {
     songItems.forEach((item, index) => {
         const songNumber = item.querySelector('.song-number');
         const playButton = item.querySelector('.play-button');
+        const trackNumber = item.querySelector('.track-number');
         
-        // Check if this is the currently playing song
+        // Remove all existing event listeners by cloning the element
+        const newItem = item.cloneNode(true);
+        item.parentNode.replaceChild(newItem, item);
+        
+        // Get references to the new elements
+        const newSongNumber = newItem.querySelector('.song-number');
+        const newPlayButton = newItem.querySelector('.play-button');
+        const newTrackNumber = newItem.querySelector('.track-number');
+        
+        // Reset the display state
+        newSongNumber.classList.remove('playing');
+        newSongNumber.style.cursor = 'default';
+        
+        // Check if this is the currently playing song and is actually playing
         if (currentSongIndex === index && isPlaying) {
-            songNumber.innerHTML = `
+            // Show pause button for currently playing song
+            newSongNumber.innerHTML = `
                 <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 15px; height: 18px;">
             `;
-            songNumber.classList.add('playing');
-            songNumber.style.cursor = 'pointer';
+            newSongNumber.classList.add('playing');
+            newSongNumber.style.cursor = 'pointer';
             
-            songNumber.addEventListener('click', function(e) {
+            // Add pause functionality
+            newSongNumber.addEventListener('click', function(e) {
                 e.stopPropagation();
                 togglePlay();
             });
         } else {
-            // Add hover functionality for play button
-            item.addEventListener('mouseenter', function() {
-                if (playButton) {
-                    playButton.style.opacity = '1';
-                }
-            });
+            // Show track number for all other songs
+            newSongNumber.innerHTML = `
+                <span class="track-number">${index + 1}</span>
+                <div class="play-button"></div>
+            `;
             
-            item.addEventListener('mouseleave', function() {
-                if (playButton) {
-                    playButton.style.opacity = '0';
-                }
-            });
-            
-            // Add play functionality
-            if (playButton) {
-                playButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    playSelectedSong(index);
+            if (!isMobile) {
+                // Add hover functionality for desktop
+                newItem.addEventListener('mouseenter', function() {
+                    const hoverPlayButton = newItem.querySelector('.play-button');
+                    const hoverTrackNumber = newItem.querySelector('.track-number');
+                    if (hoverPlayButton && hoverTrackNumber) {
+                        hoverPlayButton.style.opacity = '1';
+                        hoverTrackNumber.style.opacity = '0';
+                    }
+                });
+                
+                newItem.addEventListener('mouseleave', function() {
+                    const hoverPlayButton = newItem.querySelector('.play-button');
+                    const hoverTrackNumber = newItem.querySelector('.track-number');
+                    if (hoverPlayButton && hoverTrackNumber) {
+                        hoverPlayButton.style.opacity = '0';
+                        hoverTrackNumber.style.opacity = '1';
+                    }
                 });
             }
         }
+        
+        // Add click functionality to entire song item
+        newItem.addEventListener('click', function(e) {
+            // If this is the currently playing song, toggle play/pause
+            if (currentSongIndex === index) {
+                togglePlay();
+            } else {
+                // Otherwise, play the selected song
+                playSelectedSong(index);
+            }
+        });
+        
+        // Make the song item clickable
+        newItem.style.cursor = 'pointer';
+        newItem.style.pointerEvents = 'auto';
     });
 }
 
@@ -593,8 +764,19 @@ function seekToPosition(e) {
     if (!audio) return;
     
     const rect = progressBar.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const percentage = clickX / rect.width;
+    let clientX;
+    
+    // Handle both mouse and touch events
+    if (e.type === 'click') {
+        clientX = e.clientX;
+    } else if (e.type === 'touchend' && e.changedTouches && e.changedTouches[0]) {
+        clientX = e.changedTouches[0].clientX;
+    } else {
+        return;
+    }
+    
+    const clickX = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
     const newTime = percentage * audio.duration;
     
     audio.currentTime = newTime;
@@ -633,16 +815,67 @@ function onSongEnded() {
     skipNext();
 }
 
-// EarthCam Integration
+// LiveStreamCrop Integration
 function loadEarthCamStream() {
-    // This will be handled by earthcam-stream.js
-    console.log('📹 EarthCam stream loading...');
+    // This will be handled by live-stream-crop.js
+    console.log('📹 LiveStreamCrop loading...');
     
-    // Initialize EarthCam stream when song list view is shown
-    if (window.earthcamStream) {
-        console.log('✅ EarthCam stream already initialized');
+    // Initialize LiveStreamCrop when song list view is shown
+    if (window.liveStreamCrop) {
+        console.log('✅ LiveStreamCrop already initialized');
+        // Update crop settings if component exists
+        window.liveStreamCrop.updateCrop(-10, -15, 1.45);
     } else {
-        console.log('🔄 Waiting for EarthCam stream to initialize...');
+        console.log('🔄 Waiting for LiveStreamCrop to initialize...');
+        
+        // Initialize LiveStreamCrop for the header image
+        const headerImage = document.getElementById('header-image');
+        if (headerImage) {
+            console.log('🚀 Initializing LiveStreamCrop for header image');
+            
+            window.liveStreamCrop = new LiveStreamCrop('header-image', {
+                videoId: 'GJFHpFppy2k',
+                width: 425,
+                height: 239,
+                offsetX: 0,    // Center horizontally
+                offsetY: 0,    // Center vertically
+                scale: 1.2,    // Start with moderate scale
+                responsive: false
+            });
+        }
+    }
+}
+
+// Function to update LiveStreamCrop settings
+function updateLiveStreamCrop(offsetX, offsetY, scale) {
+    if (window.liveStreamCrop) {
+        window.liveStreamCrop.updateCrop(offsetX, offsetY, scale);
+        console.log(`🎯 Updated LiveStreamCrop: offsetX=${offsetX}, offsetY=${offsetY}, scale=${scale}`);
+    } else {
+        console.log('⚠️ LiveStreamCrop not initialized yet');
+    }
+}
+
+// Function to force re-initialize LiveStreamCrop with new settings
+function reinitializeLiveStreamCrop() {
+    if (window.liveStreamCrop) {
+        window.liveStreamCrop.destroy();
+        window.liveStreamCrop = null;
+    }
+    
+    const headerImage = document.getElementById('header-image');
+    if (headerImage) {
+        console.log('🔄 Re-initializing LiveStreamCrop with new settings');
+        
+        window.liveStreamCrop = new LiveStreamCrop('header-image', {
+            videoId: 'GJFHpFppy2k',
+            width: 425,
+            height: 239,
+            offsetX: 0,    // Center horizontally
+            offsetY: 0,    // Center vertically
+            scale: 1.2,    // Start with moderate scale
+            responsive: false
+        });
     }
 }
 
@@ -661,5 +894,7 @@ function testAnimation() {
     }
 }
 
-// Make it available globally for testing
+// Make functions available globally for testing
 window.testAnimation = testAnimation;
+window.updateLiveStreamCrop = updateLiveStreamCrop;
+window.reinitializeLiveStreamCrop = reinitializeLiveStreamCrop;

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobile Layout Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 768px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .device-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #00724d;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .test-btn:hover {
+            background: #005a3d;
+        }
+        
+        .iframe-container {
+            border: 2px solid #00724d;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+        }
+        
+        .tablet-frame {
+            width: 768px;
+            height: 1024px;
+        }
+        
+        .desktop-frame {
+            width: 100%;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Mobile Responsive Layout Test</h1>
+        
+        <div class="device-info">
+            <h3>Current Device Info:</h3>
+            <p><strong>Screen Width:</strong> <span id="screen-width"></span>px</p>
+            <p><strong>Screen Height:</strong> <span id="screen-height"></span>px</p>
+            <p><strong>Viewport Width:</strong> <span id="viewport-width"></span>px</p>
+            <p><strong>Device Type:</strong> <span id="device-type"></span></p>
+        </div>
+        
+        <div class="test-buttons">
+            <button class="test-btn" onclick="setFrameSize('mobile')">Mobile (375px)</button>
+            <button class="test-btn" onclick="setFrameSize('tablet')">Tablet (768px)</button>
+            <button class="test-btn" onclick="setFrameSize('desktop')">Desktop (Full)</button>
+        </div>
+        
+        <div class="iframe-container">
+            <iframe id="test-frame" src="index.html" class="mobile-frame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function updateDeviceInfo() {
+            document.getElementById('screen-width').textContent = screen.width;
+            document.getElementById('screen-height').textContent = screen.height;
+            document.getElementById('viewport-width').textContent = window.innerWidth;
+            
+            let deviceType = 'Desktop';
+            if (window.innerWidth <= 480) {
+                deviceType = 'Mobile (Small)';
+            } else if (window.innerWidth <= 768) {
+                deviceType = 'Mobile/Tablet';
+            }
+            
+            document.getElementById('device-type').textContent = deviceType;
+        }
+        
+        function setFrameSize(type) {
+            const iframe = document.getElementById('test-frame');
+            const container = iframe.parentElement;
+            
+            iframe.className = '';
+            
+            switch(type) {
+                case 'mobile':
+                    iframe.className = 'mobile-frame';
+                    container.style.width = '375px';
+                    container.style.margin = '0 auto';
+                    break;
+                case 'tablet':
+                    iframe.className = 'tablet-frame';
+                    container.style.width = '768px';
+                    container.style.margin = '0 auto';
+                    break;
+                case 'desktop':
+                    iframe.className = 'desktop-frame';
+                    container.style.width = '100%';
+                    container.style.margin = '0';
+                    break;
+            }
+        }
+        
+        // Update device info on load and resize
+        window.addEventListener('load', updateDeviceInfo);
+        window.addEventListener('resize', updateDeviceInfo);
+        
+        // Initial update
+        updateDeviceInfo();
+    </script>
+</body>
+</html>

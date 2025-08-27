@@ -1,45 +1,221 @@
 // Song List Page JavaScript
 
-// Global goBack function for navigation
-function goBack() {
-    const greenBackground = document.querySelector('.green-background');
-    const contentContainer = document.querySelector('.content-container');
+// FLIP transition system for smooth page transitions
+let isTransitioning = false;
+let transitionOverlay = null;
+
+// Create persistent overlay for FLIP transitions
+function createTransitionOverlay() {
+    if (transitionOverlay) return transitionOverlay;
     
-    // Remove animation classes
-    greenBackground.classList.remove('slide-up');
-    contentContainer.classList.remove('fade-in');
+    transitionOverlay = document.createElement('div');
+    transitionOverlay.id = 'transition-overlay';
+    transitionOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #00724D;
+        z-index: 9999;
+        opacity: 1;
+        pointer-events: none;
+        transform: scale(1) translate(0, 0);
+        transition: none;
+        will-change: transform, opacity;
+    `;
     
-    // Wait for animation to complete, then navigate back
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 800);
+    // Add noise pattern using CSS filter
+    transitionOverlay.style.filter = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\' x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\' filterUnits=\'userSpaceOnUse\' color-interpolation-filters=\'sRGB\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'1.25 1.25\' stitchTiles=\'stitch\' numOctaves=\'3\' result=\'noise\' seed=\'4413\'/%3E%3CfeColorMatrix in=\'noise\' type=\'luminanceToAlpha\' result=\'alphaNoise\'/%3E%3CfeComponentTransfer in=\'alphaNoise\' result=\'coloredNoise1\'%3E%3CfeFuncA type=\'discrete\' tableValues=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \'/%3E%3C/feComponentTransfer%3E%3CfeComponentTransfer in=\'alphaNoise\' result=\'coloredNoise2\'%3E%3CfeFuncA type=\'discrete\' tableValues=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color=\'%23004C33\' result=\'color1Flood\'/%3E%3CfeComposite operator=\'in\' in2=\'coloredNoise1\' in=\'color1Flood\' result=\'color1\'/%3E%3CfeFlood flood-color=\'%23519912\' result=\'color2Flood\'/%3E%3CfeComposite operator=\'in\' in2=\'coloredNoise2\' in=\'color2Flood\' result=\'color2\'/%3E%3CfeMerge result=\'effect1_noise_577_3813\'%3E%3CfeMergeNode in=\'SourceGraphic\'/%3E%3CfeMergeNode in=\'color1\'/%3E%3CfeMergeNode in=\'color2\'/%3E%3C/feMerge%3E%3C/filter%3E%3C/svg%3E#noise")';
+    
+    document.body.appendChild(transitionOverlay);
+    return transitionOverlay;
 }
 
+// FLIP transition back to main page
+function flipToMainPage() {
+    console.log('=== FLIP TO MAIN PAGE START ===');
+    console.log('flipToMainPage called');
+    
+    if (isTransitioning) {
+        console.log('❌ Already transitioning, returning');
+        return;
+    }
+    
+    isTransitioning = true;
+    console.log('✅ Starting reverse transition');
+    
+    const svgBackground = document.querySelector('.svg-background');
+    const contentContainer = document.querySelector('.content-container');
+    
+    // Debug: Check if elements exist
+    console.log('🔍 SVG Background element:', svgBackground);
+    console.log('🔍 Content Container element:', contentContainer);
+    
+    if (!svgBackground || !contentContainer) {
+        console.error('❌ Required elements not found!');
+        isTransitioning = false;
+        return;
+    }
+    
+    // Log initial states
+    console.log('📊 Initial states:');
+    console.log('  - SVG Background classes:', svgBackground.className);
+    console.log('  - SVG Background computed bottom:', window.getComputedStyle(svgBackground).bottom);
+    console.log('  - Content Container classes:', contentContainer.className);
+    console.log('  - Content Container computed opacity:', window.getComputedStyle(contentContainer).opacity);
+    
+    // Step 1: Fade out content first
+    console.log('🔄 Step 1: Fading out content');
+    console.log('  - Content container classes before:', contentContainer.className);
+    contentContainer.classList.remove('fade-in');
+    contentContainer.classList.add('fade-out');
+    console.log('  - Content container classes after:', contentContainer.className);
+    
+    // Check if classes were applied
+    setTimeout(() => {
+        console.log('  - Content container classes after 10ms:', contentContainer.className);
+        console.log('  - Content container computed opacity after 10ms:', window.getComputedStyle(contentContainer).opacity);
+    }, 10);
+    
+    // Step 2: Start background slide-down
+    setTimeout(() => {
+        console.log('🔄 Step 2: Sliding background down');
+        console.log('  - SVG background classes before:', svgBackground.className);
+        console.log('  - SVG background computed bottom before:', window.getComputedStyle(svgBackground).bottom);
+        
+        svgBackground.classList.remove('slide-up');
+        svgBackground.classList.add('slide-down');
+        
+        console.log('  - SVG background classes after:', svgBackground.className);
+        
+        // Check if classes were applied
+        setTimeout(() => {
+            console.log('  - SVG background classes after 10ms:', svgBackground.className);
+            console.log('  - SVG background computed bottom after 10ms:', window.getComputedStyle(svgBackground).bottom);
+        }, 10);
+    }, 50);
+    
+    // Step 3: Navigate after animations complete
+    setTimeout(() => {
+        console.log('🔄 Step 3: Navigating to index.html');
+        console.log('  - Final SVG background classes:', svgBackground.className);
+        console.log('  - Final SVG background computed bottom:', window.getComputedStyle(svgBackground).bottom);
+        console.log('  - Final Content container classes:', contentContainer.className);
+        console.log('  - Final Content container computed opacity:', window.getComputedStyle(contentContainer).opacity);
+        window.location.href = 'index.html';
+    }, 550);
+    
+    console.log('=== FLIP TO MAIN PAGE END ===');
+}
+
+// Global goBack function for navigation
+function goBack() {
+    console.log('🔄 goBack function called');
+    flipToMainPage();
+}
+
+// Test function to manually trigger animations
+function testAnimations() {
+    console.log('🧪 Testing animations manually');
+    const svgBackground = document.querySelector('.svg-background');
+    const contentContainer = document.querySelector('.content-container');
+    
+    if (svgBackground && contentContainer) {
+        console.log('🧪 Adding test classes');
+        svgBackground.classList.add('slide-down');
+        contentContainer.classList.add('fade-out');
+        
+        setTimeout(() => {
+            console.log('🧪 Removing test classes');
+            svgBackground.classList.remove('slide-down');
+            contentContainer.classList.remove('fade-out');
+        }, 2000);
+    }
+}
+
+// Make test function available globally
+window.testAnimations = testAnimations;
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Create overlay immediately and start with it visible
+    const overlay = createTransitionOverlay();
+    
     // Get DOM elements
-    const greenBackground = document.querySelector('.green-background');
+    const svgBackground = document.querySelector('.svg-background');
     const contentContainer = document.querySelector('.content-container');
     const backBtn = document.querySelector('.back-btn');
     
-    // Start the transition animation
+    // Start the transition animation - reverse FLIP
     function startTransition() {
-        // Trigger the green background slide-up
+        console.log('=== START TRANSITION BEGIN ===');
+        
+        // Reset any previous animation classes
+        console.log('🔄 Resetting animation classes');
+        console.log('  - SVG Background classes before reset:', svgBackground.className);
+        console.log('  - Content Container classes before reset:', contentContainer.className);
+        
+        svgBackground.classList.remove('slide-down');
+        contentContainer.classList.remove('fade-out');
+        
+        console.log('  - SVG Background classes after reset:', svgBackground.className);
+        console.log('  - Content Container classes after reset:', contentContainer.className);
+        
+        // Start with overlay covering the screen
+        console.log('🔄 Setting up overlay');
+        overlay.style.opacity = '1';
+        overlay.style.transform = 'scale(1) translate(0, 0)';
+        
+        // Trigger the SVG background slide-up
         setTimeout(() => {
-            greenBackground.classList.add('slide-up');
+            console.log('🔄 Adding slide-up class to SVG background');
+            console.log('  - SVG Background classes before slide-up:', svgBackground.className);
+            svgBackground.classList.add('slide-up');
+            console.log('  - SVG Background classes after slide-up:', svgBackground.className);
+            
+            // Check computed style
+            setTimeout(() => {
+                console.log('  - SVG Background computed bottom after slide-up:', window.getComputedStyle(svgBackground).bottom);
+            }, 10);
         }, 100);
         
-        // Trigger the content fade-in after the background animation
+        // Trigger the content fade-in much earlier - all at once
         setTimeout(() => {
+            console.log('🔄 Adding fade-in class to content container');
+            console.log('  - Content Container classes before fade-in:', contentContainer.className);
             contentContainer.classList.add('fade-in');
-        }, 500);
+            console.log('  - Content Container classes after fade-in:', contentContainer.className);
+            
+            // Check computed style
+            setTimeout(() => {
+                console.log('  - Content Container computed opacity after fade-in:', window.getComputedStyle(contentContainer).opacity);
+            }, 10);
+        }, 300);
+        
+        // Fade out the overlay to reveal the content
+        setTimeout(() => {
+            console.log('🔄 Fading out overlay');
+            overlay.style.transition = 'opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            overlay.style.opacity = '0';
+        }, 600);
+        
+        console.log('=== START TRANSITION END ===');
     }
     
     // Event listeners
-    backBtn.addEventListener('click', goBack);
+    console.log('🔗 Setting up event listeners');
+    console.log('  - Back button element:', backBtn);
+    
+    backBtn.addEventListener('click', function(e) {
+        console.log('🖱️ Back button clicked!');
+        console.log('  - Event:', e);
+        goBack();
+    });
     
     // Add keyboard support for back navigation
     document.addEventListener('keydown', function(e) {
         if (e.code === 'Escape' || e.code === 'Backspace') {
+            console.log('⌨️ Keyboard navigation triggered:', e.code);
             e.preventDefault();
             goBack();
         }
@@ -264,12 +440,9 @@ function addSongItemListeners() {
         
         // Check if this is the currently playing song
         if (currentMusicState && currentMusicState.currentSongIndex === index && currentMusicState.isPlaying) {
-            // Replace track number with pause button - create SVG inline
+            // Replace track number with pause button - use Figma-generated icon
             songNumber.innerHTML = `
-                <svg width="15" height="18" viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 15px; height: 18px;">
-                    <rect x="3" y="2" width="3" height="14" fill="white"/>
-                    <rect x="9" y="2" width="3" height="14" fill="white"/>
-                </svg>
+                <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 15px; height: 18px;">
             `;
             songNumber.classList.add('playing');
             songNumber.style.cursor = 'pointer';
