@@ -1,3 +1,5 @@
+
+
 /* Reset and base styles */
 * {
     margin: 0;
@@ -8,7 +10,8 @@
 body {
     font-family: 'Bastardo Grotesk', sans-serif;
     background-color: #fffdf9;
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: auto;
 }
 
 /* Allow scrolling in song list view */
@@ -72,7 +75,7 @@ body {
 }
 
 /* Desktop layout - show desktop buttons, hide mobile buttons */
-@media (min-width: 769px) {
+@media (min-width: 540px) {
     .controls {
         flex-direction: row;
     }
@@ -225,7 +228,8 @@ body {
     height: 100vh;
     z-index: 1;
     transition: bottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: hidden;
     opacity: 0;
     pointer-events: none;
 }
@@ -257,11 +261,18 @@ body {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.225s, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.225s;
-    padding-bottom: 60px;
+    padding: 32px 32px 60px 32px;
+    margin-top: 48px;
     overflow-y: visible;
+    display: grid;
+    grid-template-columns: 50px 20vw 1fr 120px 166px;
+    gap: 40px;
+    align-items: start;
 }
 
 .content-container.fade-out {
+    opacity: 0 !important;
+    transform: translateY(30px) !important;
     transition: opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
 
@@ -270,19 +281,52 @@ body {
     transform: translateY(0) !important;
 }
 
-/* Header Image */
-.header-image {
-    position: absolute;
-    top: 103px;
-    left: 32px;
-    width: 425px;
-    height: 239px;
+    /* Header Section - Grid Layout */
+    .content-container .header-section {
+        display: contents;
+    }
+    
+    /* Mobile Header Section */
+    @media (max-width: 539px) {
+        .content-container .header-section {
+            display: contents !important;
+        }
+    }
+
+/* Header Image - Grid Layout */
+.content-container .header-image {
+    grid-column: 1 / 2;
+    width: 100% !important;
+    max-width: none !important;
+    height: 196px !important;
+    max-height: 196.225px !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+/* Header Image - Override song-list.css */
+.content-container .header-image {
+    grid-column: 1 / 3 !important;  /* Span columns 1-2 */
+    width: 100% !important;  /* Use full width of the grid columns */
+    max-width: none !important;
+    aspect-ratio: 348.6 / 196;  /* Maintain aspect ratio */
+    height: auto !important;  /* Let height be determined by aspect ratio */
+    max-height: none !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
 }
 
 .header-image video {
@@ -291,19 +335,21 @@ body {
     object-fit: cover;
 }
 
-/* Description Text */
-.description-text {
-    position: absolute;
-    top: 94px;
-    left: 505px;
-    width: 827px;
+/* Description Text - Grid Layout */
+.content-container .description-text {
+    grid-column: 3 / 6;
+    width: auto !important;
+    height: auto !important;
     font-family: 'Bastardo Grotesk', sans-serif;
     font-weight: 300;
-    font-size: 48px;
-    line-height: 58px;
+    font-size: 48px !important;
+    line-height: 58px !important;
     color: #ffffff;
     text-align: left;
-    font-variation-settings: 'CTGR' 0, 'wdth' 100, 'wght' 300;
+    font-variation-settings: 'CTGR' 0, 'wdth' 100, 'wght' 400;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
 }
 
 .description-text p {
@@ -318,22 +364,22 @@ body {
 
 /* Song List */
 .song-list {
+    grid-column: 1 / 6;
     position: relative;
-    top: 641px;
-    left: 0;
     width: 100%;
-    padding: 0 32px;
-    margin-top: 0;
+    padding: 0;
+    margin-top: 74px;
     min-height: 200px;
     overflow-y: visible;
+    display: grid;
+    grid-template-columns: 50px 20vw 1fr 120px 166px;
+    gap: 10px;
+    align-items: start;
 }
 
 .song-item {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    grid-column: 1 / 6;
+    display: contents;
     cursor: pointer;
     transition: background-color 0.2s ease;
     pointer-events: auto;
@@ -348,19 +394,19 @@ body {
 }
 
 .song-divider {
-    width: calc(100vw - 48px);
+    grid-column: 1 / 6;
     height: 0.5px;
     background-color: #ffffff;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .song-content {
-    width: 100%;
-    height: 80px;
-    display: flex;
-    align-items: center;
+    grid-column: 1 / 6;
+    display: grid;
+    grid-template-columns: 50px 20vw 1fr 120px 166px;
     gap: 40px;
-    padding: 0 32px;
+    align-items: center;
+    height: 80px;
     font-family: 'Bastardo Grotesk', 'Noto Sans', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -370,7 +416,7 @@ body {
 }
 
 .song-number {
-    width: 50px;
+    grid-column: 1 / 2;
     text-align: center;
     opacity: 0.6;
     position: relative;
@@ -449,24 +495,24 @@ body {
 }
 
 .song-artist {
-    width: 341px;
+    grid-column: 2 / 3;
     text-align: left;
 }
 
 .song-title {
-    flex: 1;
+    grid-column: 3 / 4;
     text-align: left;
     min-width: 0;
 }
 
 .song-time {
-    width: 120px;
+    grid-column: 4 / 5;
     text-align: left;
     opacity: 0.6;
 }
 
 .song-date {
-    width: 166px;
+    grid-column: 5 / 6;
     text-align: right;
     opacity: 0.6;
 }
@@ -474,7 +520,7 @@ body {
 /* Back Button */
 .back-btn {
     position: absolute;
-    top: 32px;
+    top: -16px;
     right: 24px;
     width: 24px;
     height: 24px;
@@ -498,7 +544,7 @@ body {
 }
 
 /* Mobile Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 539px) {
     /* Music Player Mobile Layout */
     .music-player {
         background-size: cover;
@@ -697,6 +743,7 @@ body {
         width: 100vw;
         height: 100vh;
         overflow-y: auto;
+        overflow-x: visible;
         background-color: #00724d;
     }
     
@@ -709,36 +756,42 @@ body {
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.225s, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.225s;
-        padding: 0;
+        margin-top: 32px;
+        padding: 52px 24px 0 24px;
         overflow-y: auto;
+        overflow-x: visible;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 30px;
+        align-items: start;
+    }
+    
+    .content-container.fade-out {
+        opacity: 0 !important;
+        transform: translateY(30px) !important;
+        transition: opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+    
+    .content-container.fade-in {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
     }
     
     /* Header Content Container */
     .header-content {
-        position: absolute;
-        left: 24px;
-        right: 24px; /* Added to span full width with 24px padding */
-        top: 80px;
-        /* width: 345px; Removed fixed width */
-        /* height: 332px; Removed fixed height */
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-        align-items: flex-start;
-        justify-content: flex-start;
+        position: relative;
+        width: 100%;
+        display: contents;
         z-index: 5;
     }
     
     /* Description Text Mobile */
-    .description-text {
-        position: absolute !important;
-        left: 24px !important;
-        right: 24px !important;
-        top: 80px !important;
-        width: calc(100% - 48px) !important;
+    .content-container .description-text {
+        grid-column: 1 / 4 !important;
+        width: 100% !important;
         font-family: 'Bastardo Grotesk', sans-serif;
         font-weight: 300;
-        font-size: 24px !important;
+        font-size: 30px !important;
         line-height: 32px !important;
         color: #ffffff;
         text-align: left;
@@ -750,15 +803,12 @@ body {
     
     /* Header Image Mobile */
     .header-image {
-        position: absolute !important;
-        left: 24px !important;
-        right: 24px !important;
-        top: 356px !important;
-        width: calc(100% - 48px) !important;
+        grid-column: 1 / 4 !important;
+        width: 100% !important;
         height: auto !important;
         aspect-ratio: 2490/1400;
         margin: 0 !important;
-        padding: 0px;
+        padding: 0;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -776,68 +826,85 @@ body {
     }
     
     .song-list {
-        position: absolute;
-        top: 418px; /* Adjusted based on header content height and 24px spacing */
-        left: 0;
-        width: 100%; /* Adjusted to fill parent width */
-        padding: 0 24px; /* Added 24px padding on left/right */
-        margin-top: 0;
-        overflow-y: auto; /* Added for scrolling */
-        height: calc(100vh - 418px - 234px); /* Dynamic height to fill space above controls (234px height) */
+        grid-column: 1 / 4;
+        position: relative;
+        width: 100%;
+        padding: 0;
+        margin-top: 40px;
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 24px;
+        align-items: start;
     }
     
     .song-content {
-        flex-direction: row;
+        grid-column: 1 / 4;
+        display: grid;
+        grid-template-columns: 28px 1fr 1fr;
         gap: 24px;
         height: 80px;
-        padding: 0 24px;
+        padding: 0;
         font-size: 18px;
         align-items: center;
     }
     
-    .song-artist,
-    .song-title,
-    .song-time,
-    .song-date {
-        width: auto;
+    .song-artist {
+        grid-column: 2 / 3;
+        text-align: left;
+    }
+    
+    .song-title {
+        grid-column: 3 / 4;
         text-align: left;
     }
     
     .song-time,
     .song-date {
-        opacity: 0.6;
-        font-size: 18px;
+        display: none;
     }
     
     /* All song items use simplified 3-column layout on mobile */
+    .song-item {
+        grid-column: 1 / 4;
+        display: contents;
+    }
+    
     .song-item .song-content {
+        grid-column: 1 / 4;
+        display: grid;
+        grid-template-columns: 28px 1fr 1fr;
         gap: 24px;
-        padding: 0 24px;
+        padding: 0;
+        width: 100%;
     }
     
     .song-item .song-number {
-        width: 28px;
+        grid-column: 1 / 2;
         text-align: center;
         opacity: 0.6;
-        flex-shrink: 0;
     }
     
     .song-item .song-artist {
-        width: auto !important;
-        min-width: 80px !important;
-        max-width: 150px !important;
-        flex: 1 !important;
+        grid-column: 2 / 3;
+        text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.2;
     }
     
     .song-item .song-title {
-        flex: 2 !important;
-        min-width: 0;
+        grid-column: 3 / 4;
+        text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.2;
     }
     
     .song-item .song-time,
@@ -847,16 +914,17 @@ body {
     
     .back-btn {
         position: absolute;
-        top: 24px;
+        top: 0;
         right: 24px;
         z-index: 10;
     }
 
     .song-divider {
-        width: calc(100vw - 48px);
+        grid-column: 1 / 4;
+        width: 100%;
         height: 0.5px;
         background-color: #ffffff;
-        margin: 0 auto;
+        margin: 0;
     }
 }
 
@@ -885,40 +953,45 @@ body {
     
     /* Header area adjustments for small mobile */
     .content-container {
-        gap: 16px;
+        gap: 30px;
+        margin-top: 32px;
+        padding: 52px 16px 0 16px;
     }
     
-    .description-text {
+    .content-container .description-text {
         font-size: 20px !important;
         line-height: 28px !important;
-        left: 16px !important;
-        right: 16px !important;
-        width: calc(100% - 32px) !important;
     }
     
     .header-image {
-        left: 16px !important;
-        right: 16px !important;
-        width: calc(100% - 32px) !important;
+        width: 100% !important;
     }
     
     .song-item .song-artist {
-        width: auto !important;
-        min-width: 60px !important;
-        max-width: 120px !important;
+        grid-column: 2 / 3;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.2;
     }
     
     .song-item .song-content {
+        grid-column: 1 / 4;
+        display: grid;
+        grid-template-columns: 28px 1fr 1fr;
         gap: 16px;
-        padding: 0 16px;
+        padding: 0;
     }
     
     .song-list {
-        padding: 0 16px;
+        padding: 0;
     }
     
     .song-content {
-        padding: 0 16px;
+        padding: 0;
     }
 }
 
@@ -968,8 +1041,6 @@ body {
 /* LiveStreamCrop Component Styles */
 .live-stream-crop {
     /* CSS Variables for easy customization */
-    --livestream-width: 640px;
-    --livestream-height: 360px;
     --livestream-offset-x: 0px;
     --livestream-offset-y: 0px;
     --livestream-scale: 1;
@@ -977,8 +1048,8 @@ body {
     --livestream-background: #000;
     
     position: relative;
-    width: var(--livestream-width);
-    height: var(--livestream-height);
+    width: 100%;  /* Fill the header image container */
+    height: 100%;  /* Fill the header image container */
     border-radius: var(--livestream-border-radius);
     overflow: hidden;
     background: var(--livestream-background);
@@ -1140,8 +1211,7 @@ body {
 /* Responsive adjustments for LiveStreamCrop */
 @media (max-width: 768px) {
     .live-stream-crop {
-        --livestream-width: 100%;
-        --livestream-height: 200px;
+        /* Width and height are now 100% to fill container */
     }
     
     .live-stream-crop .play-icon {

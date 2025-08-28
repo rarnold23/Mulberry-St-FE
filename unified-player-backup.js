@@ -427,8 +427,8 @@ function showPlayer() {
     setTimeout(() => {
         console.log('🔧 Step 3: Showing player view after fade-out');
         playerView.style.display = 'block';
-        playerView.style.backgroundColor = '#fffdf9'; // Temporary white background
-        console.log('  - Player view shown with white background');
+        // Removed temporary white background to prevent white flash
+        console.log('  - Player view shown');
     }, 500); // Wait for fade-out animation to complete (450ms) + small buffer
     
     // 4. Wait for all animations to complete, then hide song list view
