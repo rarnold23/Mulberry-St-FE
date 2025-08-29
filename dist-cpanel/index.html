@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music Player - Bad Bunny</title>
+    <link rel="stylesheet" href="styles.css?v=1.2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bastardo Grotesk Font -->
+    <style>
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Thin.ttf') format('truetype');
+            font-weight: 100;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Semibold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bastardo Grotesk';
+            src: url('assets/fonts/BastardoGrotesk-Black.ttf') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Player View -->
+    <div class="music-player" id="player-view">
+        <!-- Background -->
+        <div class="background"></div>
+        
+        <!-- Main Illustration -->
+        <div class="main-illustration">
+            <img src="assets/Illustration.png" alt="Main Illustration" class="illustration-image">
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <!-- Desktop buttons (hidden on mobile) -->
+            <button class="control-btn previous-btn desktop-btn">
+                <img src="http://localhost:3845/assets/15a14a27ef2a3177aee68bd25818d76a32bac853.svg" alt="Previous" style="width: 16px; height: 16px;">
+            </button>
+            
+            <button class="control-btn play-btn desktop-btn">
+                <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
+            </button>
+            
+            <button class="control-btn next-btn desktop-btn">
+                <img src="http://localhost:3845/assets/a0e6fe994a8198a9b5fd1a4608b4d07dd9e9f799.svg" alt="Next" style="width: 16px; height: 16px;">
+            </button>
+            
+            <div class="timeline">
+                <div class="track-info">
+                    <h3 class="track-title">Bad Bunny — BAILE INoLVIDABLE</h3>
+                    <p class="track-time">8:37 PM, July 27, 2025</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="time-display">
+                    <span class="current-time">2:35</span>
+                    <span class="total-time">3:21</span>
+                </div>
+            </div>
+            
+            <button class="control-btn list-btn desktop-btn" id="show-song-list">
+                <img src="http://localhost:3845/assets/60d328f5be0e992eb83d7ada771f324512a9bb0c.svg" alt="List" style="width: 24px; height: 20px;">
+            </button>
+            
+            <!-- Mobile buttons (hidden on desktop) -->
+            <div class="buttons-row mobile-buttons">
+                <button class="control-btn previous-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/15a14a27ef2a3177aee68bd25818d76a32bac853.svg" alt="Previous" style="width: 16px; height: 16px;">
+                </button>
+                
+                <button class="control-btn play-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
+                </button>
+                
+                <button class="control-btn next-btn mobile-btn">
+                    <img src="http://localhost:3845/assets/a0e6fe994a8198a9b5fd1a4608b4d07dd9e9f799.svg" alt="Next" style="width: 16px; height: 16px;">
+                </button>
+                
+                <button class="control-btn list-btn mobile-btn" id="show-song-list-mobile">
+                    <img src="http://localhost:3845/assets/60d328f5be0e992eb83d7ada771f324512a9bb0c.svg" alt="List" style="width: 24px; height: 20px;">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Song List View -->
+    <div class="song-list-container" id="song-list-view" style="display: none;">
+        <!-- SVG Background with Noise Pattern -->
+        <div class="svg-background">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100vw" height="100vh" viewBox="0 0 1280 832" preserveAspectRatio="none" fill="none">
+                <g filter="url(#filter0_n_577_3813)">
+                    <rect width="1280" height="832" fill="#00724D"/>
+                </g>
+                <defs>
+                    <filter id="filter0_n_577_3813" x="0" y="0" width="1280" height="832" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                        <feTurbulence type="fractalNoise" baseFrequency="1.25 1.25" stitchTiles="stitch" numOctaves="3" result="noise" seed="4413"/>
+                        <feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise"/>
+                        <feComponentTransfer in="alphaNoise" result="coloredNoise1">
+                            <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+                        </feComponentTransfer>
+                        <feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped"/>
+                        <feComponentTransfer in="alphaNoise" result="coloredNoise2">
+                            <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+                        </feComponentTransfer>
+                        <feComposite operator="in" in2="shape" in="coloredNoise2" result="noise2Clipped"/>
+                        <feFlood flood-color="#004C33" result="color1Flood"/>
+                        <feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1"/>
+                        <feFlood flood-color="#519912" result="color2Flood"/>
+                        <feComposite operator="in" in2="noise2Clipped" in="color2Flood" result="color2"/>
+                        <feMerge result="effect1_noise_577_3813">
+                            <feMergeNode in="shape"/>
+                            <feMergeNode in="color1"/>
+                            <feMergeNode in="color2"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+        
+        <!-- Content Container -->
+        <div class="content-container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <!-- Header Image -->
+                <div class="header-image" id="header-image">
+                    <!-- EarthCam video will be loaded here via proxy -->
+                </div>
+                
+                <!-- Description Text -->
+                <div class="description-text">
+                    <p>Mulberry Street Radio is the sound of Little Italy. Songs are identified from the livestream and catalogued here, whether it's coming from a car, a storefront, or some dickhead with a bluetooth speaker.</p>
+                    <p>&nbsp;</p>
+                    <p>A dumb idea from <a href="https://www.rich-arnold.com">Rich Arnold</a>.</p>
+                </div>
+            </div>
+            
+            <!-- Song List -->
+            <div class="song-list" id="songList">
+                <!-- Songs will be populated dynamically -->
+            </div>
+            
+            <!-- Back Button -->
+            <button class="back-btn" id="back-to-player">
+                <img src="http://localhost:3845/assets/c41e93d2ce7848db686d2bdf0cd5a8b923302220.svg" alt="Back">
+            </button>
+        </div>
+    </div>
+    
+    <script src="unified-player.js"></script>
+    <script src="live-stream-crop.js"></script>
+</body>
+</html>

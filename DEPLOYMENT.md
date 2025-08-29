@@ -1,29 +1,83 @@
 # Deploying Mulberry Street Radio to rich-arnold.com/mulberrystradio
 
-## Option 1: Vercel Deployment (Recommended)
+## cPanel Hosting Deployment (Recommended for your setup)
 
-1. **Install Vercel CLI** (if not already installed):
+### Step 1: Build the Project
+```bash
+npm run build
+```
+
+### Step 2: Access cPanel
+1. Log into your cPanel account for rich-arnold.com
+2. Navigate to the **File Manager**
+
+### Step 3: Create the Directory Structure
+1. In the File Manager, navigate to your `public_html` directory
+2. Create a new folder called `mulberrystradio`
+3. This will create the path: `public_html/mulberrystradio/`
+
+### Step 4: Upload Files
+1. Open the `mulberrystradio` folder you just created
+2. Upload all files from the `dist` folder to this directory
+3. Make sure to maintain the folder structure:
+   - `index.html` (in the root of mulberrystradio)
+   - `styles.css`
+   - `unified-player.js`
+   - `live-stream-crop.js`
+   - `server.js`
+   - `package.json`
+   - `assets/` folder (with all images)
+   - `music/` folder (with all audio files)
+
+### Step 5: Configure Node.js (if needed)
+If your cPanel supports Node.js applications:
+1. In cPanel, look for **Node.js** or **Node.js Selector**
+2. Create a new Node.js app
+3. Set the application root to `/mulberrystradio`
+4. Set the startup file to `server.js`
+5. Set the Node.js version to 14 or higher
+
+### Step 6: Test the Deployment
+Visit `rich-arnold.com/mulberrystradio` to test your application
+
+## Alternative: Static File Serving (Simpler)
+
+If you don't need the Node.js server functionality:
+
+1. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+2. **Upload only the static files**:
+   - `index.html`
+   - `styles.css`
+   - `unified-player.js`
+   - `live-stream-crop.js`
+   - `assets/` folder
+   - `music/` folder
+
+3. **Remove server files**:
+   - Don't upload `server.js` or `package.json`
+
+## Alternative Deployment Options
+
+### Option 1: Vercel Deployment
+1. **Install Vercel CLI**:
    ```bash
    npm install -g vercel
    ```
 
-2. **Login to Vercel**:
-   ```bash
-   vercel login
-   ```
-
-3. **Deploy to Vercel**:
+2. **Deploy to Vercel**:
    ```bash
    vercel --prod
    ```
 
-4. **Configure Custom Domain**:
-   - In your Vercel dashboard, go to your project settings
-   - Add `rich-arnold.com` as a custom domain
+3. **Configure Custom Domain**:
+   - In your Vercel dashboard, add `rich-arnold.com` as a custom domain
    - Configure the path `/mulberrystradio` to point to your deployment
 
-## Option 2: Static Hosting (Netlify, GitHub Pages, etc.)
-
+### Option 2: Static Hosting (Netlify, GitHub Pages, etc.)
 1. **Build the project**:
    ```bash
    npm run build
@@ -34,17 +88,6 @@
 3. **Configure the subdirectory**:
    - Set the base path to `/mulberrystradio`
    - Ensure all assets are served correctly
-
-## Option 3: Traditional Web Hosting
-
-1. **Build the project**:
-   ```bash
-   npm run build
-   ```
-
-2. **Upload files** to your web server at the path `/mulberrystradio/`
-
-3. **Configure your web server** to serve the files correctly
 
 ## Environment Variables
 
