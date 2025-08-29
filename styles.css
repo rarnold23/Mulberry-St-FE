@@ -9,7 +9,7 @@
 
 body {
     font-family: 'Bastardo Grotesk', sans-serif;
-    background-color: #fffdf9;
+    background-color: #061d01;
     overflow-x: visible;
     overflow-y: auto;
 }
@@ -1071,11 +1071,67 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     color: white;
     font-family: 'Bastardo Grotesk', sans-serif;
     z-index: 10;
     transition: opacity 0.3s ease;
+}
+
+/* Custom background image */
+.live-stream-crop .custom-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/little-italy-earthcam.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+/* Play overlay */
+.live-stream-crop .play-overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background: transparent;
+    padding: 0;
+}
+
+/* Play button circle */
+.live-stream-crop .play-button-circle {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.live-stream-crop .play-button-circle:hover {
+    background: #f8f8f8;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Play triangle */
+.live-stream-crop .play-triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 14px 0 14px 24px;
+    border-color: transparent transparent transparent #00724d;
+    margin-left: 4px;
+    border-radius: 2px;
 }
 
 .live-stream-crop .play-facade.hidden {
@@ -1108,6 +1164,11 @@ body {
     border-width: 12px 0 12px 20px;
     border-color: transparent transparent transparent white;
     margin-left: 4px;
+}
+
+/* Hide the default play icon since we have one in the SVG background */
+.live-stream-crop .play-overlay .play-icon {
+    display: none;
 }
 
 .live-stream-crop .play-text {
@@ -1229,5 +1290,22 @@ body {
     
     .live-stream-crop .play-subtext {
         font-size: 12px;
+    }
+    
+    /* Mobile adjustments for custom background */
+    .live-stream-crop .play-button-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .live-stream-crop .play-triangle {
+        border-width: 10px 0 10px 17px;
+        margin-left: 2px;
+        border-radius: 1px;
+    }
+    
+    .live-stream-crop .custom-background {
+        background-size: contain;
+        background-position: center;
     }
 }

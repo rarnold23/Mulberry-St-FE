@@ -42,11 +42,14 @@ class LiveStreamCrop {
         
         this.container.innerHTML = `
             <div class="live-stream-crop${responsiveClass}">
-                <!-- Click-to-play facade -->
+                <!-- Click-to-play facade with custom background image -->
                 <div class="play-facade" id="play-facade">
-                    <div class="play-icon"></div>
-                    <div class="play-text">Click to Play Live Stream</div>
-                    <div class="play-subtext">Little Italy, NYC</div>
+                    <div class="custom-background"></div>
+                    <div class="play-overlay">
+                        <div class="play-button-circle">
+                            <div class="play-triangle"></div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- YouTube iframe container -->
