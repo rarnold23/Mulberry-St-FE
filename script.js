@@ -355,12 +355,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isPlaying) {
             // Pause icon from Figma
             playBtn.innerHTML = `
-                <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 24px; height: 30px;">
+                <img src="assets/pause-btn-icon.svg" alt="Pause" style="width: 24px; height: 30px;">
             `;
         } else {
             // Play icon from Figma
             playBtn.innerHTML = `
-                <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
+                <img src="assets/play-btn-icon.svg" alt="Play" style="width: 24px; height: 30px;">
             `;
         }
     }

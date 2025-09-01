@@ -442,7 +442,7 @@ function addSongItemListeners() {
         if (currentMusicState && currentMusicState.currentSongIndex === index && currentMusicState.isPlaying) {
             // Replace track number with pause button - use Figma-generated icon
             songNumber.innerHTML = `
-                <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 15px; height: 18px;">
+                <img src="assets/list_pausebtn.svg" alt="Pause" style="width: 15px; height: 18px;">
             `;
             songNumber.classList.add('playing');
             songNumber.style.cursor = 'pointer';
