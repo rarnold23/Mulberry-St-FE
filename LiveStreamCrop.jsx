@@ -6,7 +6,7 @@ import React, { useState, useRef, useEffect } from 'react';
  */
 
 const LiveStreamCrop = ({
-    videoId = 'GJFHpFppy2k',
+    videoId = '0vkld4n1a7o',
     width = 640,
     height = 360,
     offsetX = 0,

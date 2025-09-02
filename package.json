@@ -8,6 +8,8 @@
     "dev": "nodemon server.js",
     "build": "node build-static.js",
     "build:cpanel": "node build-cpanel.js",
+    "update-livestream": "# node update-livestream.js",
+    "update-livestream:simple": "# node update-livestream-simple.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

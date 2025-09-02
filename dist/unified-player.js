@@ -632,7 +632,7 @@ function addSongItemListeners() {
         if (currentSongIndex === index && isPlaying) {
             // Show pause button for currently playing song
             newSongNumber.innerHTML = `
-                <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 15px; height: 18px;">
+                <img src="assets/list_pausebtn.svg" alt="Pause" style="width: 15px; height: 18px;">
             `;
             newSongNumber.classList.add('playing');
             newSongNumber.style.cursor = 'pointer';
@@ -738,11 +738,11 @@ function updateTrackInfo() {
 function updatePlayButton() {
     if (isPlaying) {
         playBtn.innerHTML = `
-            <img src="http://localhost:3845/assets/02ffbe30d55b681ebda4d04fcb7fbedb855adf88.svg" alt="Pause" style="width: 24px; height: 30px;">
+            <img src="assets/pause-btn-icon.svg" alt="Pause" style="width: 24px; height: 30px;">
         `;
     } else {
         playBtn.innerHTML = `
-            <img src="http://localhost:3845/assets/9b3edc55cc411a667155c00cde51641c04ab5bfb.svg" alt="Play" style="width: 24px; height: 30px;">
+            <img src="assets/play-btn-icon.svg" alt="Play" style="width: 24px; height: 30px;">
         `;
     }
 }

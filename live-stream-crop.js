@@ -7,7 +7,7 @@ class LiveStreamCrop {
     constructor(container, options = {}) {
         this.container = typeof container === 'string' ? document.getElementById(container) : container;
         this.options = {
-            videoId: options.videoId || 'GJFHpFppy2k',
+            videoId: options.videoId || '0vkld4n1a7o',
             width: options.width || 640,
             height: options.height || 360,
             offsetX: options.offsetX || 0,
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-livestream-crop]');
     
     containers.forEach(container => {
-        const videoId = container.dataset.videoId || 'GJFHpFppy2k';
+        const videoId = container.dataset.videoId || '0vkld4n1a7o';
         const width = parseInt(container.dataset.width) || 640;
         const height = parseInt(container.dataset.height) || 360;
         const offsetX = parseInt(container.dataset.offsetX) || 0;
