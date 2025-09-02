@@ -899,7 +899,7 @@ function loadEarthCamStream() {
             console.log('🚀 Initializing LiveStreamCrop for header image');
             
             window.liveStreamCrop = new LiveStreamCrop('header-image', {
-                videoId: 'GJFHpFppy2k',
+                videoId: '0vkld4n1a7o',
                 width: 425,
                 height: 239,
                 offsetX: 0,    // Center horizontally
@@ -933,7 +933,7 @@ function reinitializeLiveStreamCrop() {
         console.log('🔄 Re-initializing LiveStreamCrop with new settings');
         
         window.liveStreamCrop = new LiveStreamCrop('header-image', {
-            videoId: 'GJFHpFppy2k',
+            videoId: '0vkld4n1a7o',
             width: 425,
             height: 239,
             offsetX: 0,    // Center horizontally
